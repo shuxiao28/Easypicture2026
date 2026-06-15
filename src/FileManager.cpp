@@ -1,4 +1,9 @@
 #include "FileManager.h"
+#include "Rectangle.h"
+#include "Ellipse.h"
+#include "Triangle.h"
+#include "Polygon.h"
+#include "Curve.h"
 #include <QFile>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
@@ -170,7 +175,7 @@ bool FileManager::loadScene(GraphicsScene* scene, const QString& filePath) {
                 QXmlStreamAttributes attrs = reader.attributes();
                 QString d = attrs.value("d").toString();
                 
-                QStringList tokens = d.split(" ", Qt::SkipEmptyParts);
+                QStringList tokens = d.split(" ", QString::SkipEmptyParts);
                 QVector<QPoint> points;
                 
                 for (int i = 0; i < tokens.size(); ) {

@@ -1,4 +1,6 @@
+#define _USE_MATH_DEFINES
 #include "Ellipse.h"
+#include <cmath>
 
 Ellipse::Ellipse() {
 }
@@ -103,7 +105,7 @@ QRect Ellipse::boundingRect() const {
 }
 
 Shape::ShapeType Ellipse::type() const {
-    return Ellipse;
+    return Shape::Ellipse;
 }
 
 void Ellipse::setRect(const QRect& rect) {

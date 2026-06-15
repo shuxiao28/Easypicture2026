@@ -31,6 +31,7 @@ private slots:
     void onSetPenColor();
     void onSetFillColor();
     void onPenWidthChanged(int width);
+    void onClearCanvas();
     void onClearSelection();
     void onDeleteSelected();
 

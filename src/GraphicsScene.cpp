@@ -59,6 +59,10 @@ void GraphicsScene::deselectAll() {
     emit selectionChanged();
 }
 
+void GraphicsScene::clearSelection() {
+    deselectAll();
+}
+
 void GraphicsScene::clear() {
     for (Shape* s : m_shapes) {
         delete s;

@@ -1,5 +1,7 @@
+#define _USE_MATH_DEFINES
 #include "Triangle.h"
 #include <QPainterPath>
+#include <cmath>
 
 Triangle::Triangle() {
 }
@@ -83,7 +85,7 @@ QRect Triangle::boundingRect() const {
 }
 
 Shape::ShapeType Triangle::type() const {
-    return Triangle;
+    return Shape::Triangle;
 }
 
 void Triangle::setPoints(const QPoint& p1, const QPoint& p2, const QPoint& p3) {

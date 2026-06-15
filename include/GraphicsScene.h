@@ -18,6 +18,7 @@ public:
     void selectShape(Shape* shape);
     void selectMultiple(const QList<Shape*>& shapes);
     void deselectAll();
+    void clearSelection();
     void clear();
     void deleteSelected();
 

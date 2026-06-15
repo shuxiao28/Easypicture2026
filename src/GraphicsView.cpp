@@ -20,10 +20,10 @@ GraphicsView::~GraphicsView() {
 
 void GraphicsView::setScene(GraphicsScene* scene) {
     m_scene = scene;
-    connect(m_scene, &GraphicsScene::sceneCleared, this, &GraphicsView::update);
-    connect(m_scene, &GraphicsScene::shapeAdded, this, &GraphicsView::update);
-    connect(m_scene, &GraphicsScene::shapeRemoved, this, &GraphicsView::update);
-    connect(m_scene, &GraphicsScene::selectionChanged, this, &GraphicsView::update);
+    connect(m_scene, &GraphicsScene::sceneCleared, this, [this]() { this->update(); });
+    connect(m_scene, &GraphicsScene::shapeAdded, this, [this](Shape*) { this->update(); });
+    connect(m_scene, &GraphicsScene::shapeRemoved, this, [this](Shape*) { this->update(); });
+    connect(m_scene, &GraphicsScene::selectionChanged, this, [this]() { this->update(); });
     update();
 }
 

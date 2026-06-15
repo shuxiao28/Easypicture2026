@@ -1,4 +1,7 @@
+#define _USE_MATH_DEFINES
 #include "Curve.h"
+#include <cmath>
+#include <algorithm>
 
 Curve::Curve() {
 }
@@ -54,11 +57,28 @@ void Curve::draw(QPainter* painter) const {
 bool Curve::contains(const QPoint& point) const {
     if (m_controlPoints.size() < 2) return false;
     
-    int tolerance = 5;
+    int tolerance = 8;
     
     if (m_controlPoints.size() == 2) {
-        QLine line(m_controlPoints[0], m_controlPoints[1]);
-        return line.distanceToPoint(point) < tolerance;
+        QPoint p1 = m_controlPoints[0];
+        QPoint p2 = m_controlPoints[1];
+        
+        int dx = p2.x() - p1.x();
+        int dy = p2.y() - p1.y();
+        int len2 = dx * dx + dy * dy;
+        
+        if (len2 == 0) {
+            int dist2 = (point.x() - p1.x()) * (point.x() - p1.x()) + 
+                        (point.y() - p1.y()) * (point.y() - p1.y());
+            return dist2 < tolerance * tolerance;
+        }
+        
+        qreal t = qMax(0.0, qMin(1.0, ((point.x() - p1.x()) * dx + (point.y() - p1.y()) * dy) / (qreal)len2));
+        QPoint projection(p1.x() + t * dx, p1.y() + t * dy);
+        
+        int dist2 = (point.x() - projection.x()) * (point.x() - projection.x()) + 
+                    (point.y() - projection.y()) * (point.y() - projection.y());
+        return dist2 < tolerance * tolerance;
     }
     
     QPainterPath path;
@@ -76,7 +96,7 @@ bool Curve::contains(const QPoint& point) const {
         }
     }
     
-    return path.contains(point) || path.distanceToPoint(point) < tolerance;
+    return path.contains(point);
 }
 
 void Curve::translate(const QPoint& offset) {
@@ -128,7 +148,7 @@ QRect Curve::boundingRect() const {
 }
 
 Shape::ShapeType Curve::type() const {
-    return Curve;
+    return Shape::Curve;
 }
 
 void Curve::setControlPoints(const QVector<QPoint>& points) {

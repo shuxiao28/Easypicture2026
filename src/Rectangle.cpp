@@ -1,4 +1,7 @@
+#define _USE_MATH_DEFINES
 #include "Rectangle.h"
+#include <cmath>
+#include <algorithm>
 
 Rectangle::Rectangle() {
 }
@@ -97,7 +100,7 @@ QRect Rectangle::boundingRect() const {
 }
 
 Shape::ShapeType Rectangle::type() const {
-    return Rectangle;
+    return Shape::Rectangle;
 }
 
 void Rectangle::setRect(const QRect& rect) {

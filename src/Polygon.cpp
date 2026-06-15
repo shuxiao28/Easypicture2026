@@ -1,4 +1,6 @@
+#define _USE_MATH_DEFINES
 #include "Polygon.h"
+#include <cmath>
 
 Polygon::Polygon() {
 }
@@ -89,7 +91,7 @@ QRect Polygon::boundingRect() const {
 }
 
 Shape::ShapeType Polygon::type() const {
-    return Polygon;
+    return Shape::Polygon;
 }
 
 void Polygon::setPoints(const QVector<QPoint>& points) {

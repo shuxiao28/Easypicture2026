@@ -1,7 +1,9 @@
 #include "MainWindow.h"
+#include "FileManager.h"
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QStatusBar>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
@@ -248,6 +250,11 @@ void MainWindow::onClearCanvas() {
         m_scene->clear();
         statusBar()->showMessage("画布已清空");
     }
+}
+
+void MainWindow::onClearSelection() {
+    m_scene->clearSelection();
+    statusBar()->showMessage("已取消选择");
 }
 
 void MainWindow::onDeleteSelected() {
