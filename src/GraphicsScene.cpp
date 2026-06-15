@@ -38,6 +38,19 @@ void GraphicsScene::selectShape(Shape* shape) {
     emit selectionChanged();
 }
 
+void GraphicsScene::selectMultiple(const QList<Shape*>& shapes) {
+    for (Shape* s : m_selectedShapes) {
+        s->setSelected(false);
+    }
+    m_selectedShapes.clear();
+    
+    for (Shape* s : shapes) {
+        s->setSelected(true);
+        m_selectedShapes.append(s);
+    }
+    emit selectionChanged();
+}
+
 void GraphicsScene::deselectAll() {
     for (Shape* s : m_selectedShapes) {
         s->setSelected(false);
@@ -88,4 +101,15 @@ void GraphicsScene::scaleSelected(qreal factor, const QPoint& center) {
     for (Shape* s : m_selectedShapes) {
         s->scale(factor, center);
     }
+}
+
+void GraphicsScene::deleteSelected() {
+    QList<Shape*> toDelete = m_selectedShapes;
+    for (Shape* s : toDelete) {
+        removeShape(s);
+    }
+}
+
+bool GraphicsScene::hasSelection() const {
+    return !m_selectedShapes.isEmpty();
 }

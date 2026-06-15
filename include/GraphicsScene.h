@@ -16,12 +16,15 @@ public:
     void addShape(Shape* shape);
     void removeShape(Shape* shape);
     void selectShape(Shape* shape);
+    void selectMultiple(const QList<Shape*>& shapes);
     void deselectAll();
     void clear();
+    void deleteSelected();
 
     QList<Shape*> shapes() const;
     QList<Shape*> selectedShapes() const;
     Shape* shapeAt(const QPoint& point) const;
+    bool hasSelection() const;
 
     void translateSelected(const QPoint& offset);
     void rotateSelected(qreal angle, const QPoint& center);

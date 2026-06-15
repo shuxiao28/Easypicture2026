@@ -50,6 +50,7 @@ private:
     QPoint m_endPoint;
     QVector<QPoint> m_polygonPoints;
     bool m_isDrawing;
+    bool m_isDragging;
 };
 
 #endif
