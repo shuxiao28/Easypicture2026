@@ -43,6 +43,3 @@ CONFIG += c++11
 
 QMAKE_CXXFLAGS += -Wall -Wextra
 
-win32 {
-    RC_ICONS = resources/app.ico
-}

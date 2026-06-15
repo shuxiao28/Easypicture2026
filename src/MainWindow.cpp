@@ -28,35 +28,35 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::createActions() {
-    m_newAction = new QAction(QIcon(":/icons/new.png"), "新建", this);
+    m_newAction = new QAction("新建", this);
     m_newAction->setShortcut(QKeySequence::New);
     
-    m_openAction = new QAction(QIcon(":/icons/open.png"), "打开", this);
+    m_openAction = new QAction("打开", this);
     m_openAction->setShortcut(QKeySequence::Open);
     
-    m_saveAction = new QAction(QIcon(":/icons/save.png"), "保存", this);
+    m_saveAction = new QAction("保存", this);
     m_saveAction->setShortcut(QKeySequence::Save);
     
-    m_exitAction = new QAction(QIcon(":/icons/exit.png"), "退出", this);
+    m_exitAction = new QAction("退出", this);
     m_exitAction->setShortcut(QKeySequence::Quit);
     
-    m_selectAction = new QAction(QIcon(":/icons/select.png"), "选择", this);
+    m_selectAction = new QAction("选择", this);
     m_selectAction->setCheckable(true);
     m_selectAction->setChecked(true);
     
-    m_triangleAction = new QAction(QIcon(":/icons/triangle.png"), "三角形", this);
+    m_triangleAction = new QAction("三角形", this);
     m_triangleAction->setCheckable(true);
     
-    m_rectangleAction = new QAction(QIcon(":/icons/rectangle.png"), "矩形", this);
+    m_rectangleAction = new QAction("矩形", this);
     m_rectangleAction->setCheckable(true);
     
-    m_ellipseAction = new QAction(QIcon(":/icons/ellipse.png"), "椭圆", this);
+    m_ellipseAction = new QAction("椭圆", this);
     m_ellipseAction->setCheckable(true);
     
-    m_polygonAction = new QAction(QIcon(":/icons/polygon.png"), "多边形", this);
+    m_polygonAction = new QAction("多边形", this);
     m_polygonAction->setCheckable(true);
     
-    m_curveAction = new QAction(QIcon(":/icons/curve.png"), "曲线", this);
+    m_curveAction = new QAction("曲线", this);
     m_curveAction->setCheckable(true);
     
     QActionGroup* drawGroup = new QActionGroup(this);
@@ -152,6 +152,8 @@ void MainWindow::onOpenFile() {
         "矢量图形文件 (*.svg);;所有文件 (*.*)");
     
     if (!filePath.isEmpty()) {
+        FileManager manager;
+        manager.loadScene(m_scene, filePath);
         statusBar()->showMessage("打开文件: " + filePath);
     }
 }
@@ -161,6 +163,8 @@ void MainWindow::onSaveFile() {
         "SVG文件 (*.svg);;所有文件 (*.*)");
     
     if (!filePath.isEmpty()) {
+        FileManager manager;
+        manager.saveScene(m_scene, filePath);
         statusBar()->showMessage("保存文件: " + filePath);
     }
 }
