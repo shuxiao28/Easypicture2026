@@ -3,6 +3,7 @@ build*/
 debug/
 release/
 *.pro.user
+*.pro.user.*
 *.qbs.user
 *.qbs.cache
 .qmake.stash
