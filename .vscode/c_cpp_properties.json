@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Qt",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Qt/Qt5.12.12/5.12.12/mingw73_64/include/**",
+                "C:/Qt/Qt5.12.12/5.12.12/mingw73_64/include/QtCore",
+                "C:/Qt/Qt5.12.12/5.12.12/mingw73_64/include/QtGui",
+                "C:/Qt/Qt5.12.12/5.12.12/mingw73_64/include/QtWidgets",
+                "C:/Qt/Qt5.12.12/5.12.12/mingw73_64/include/QtSvg"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "QT_CORE_LIB",
+                "QT_GUI_LIB",
+                "QT_WIDGETS_LIB",
+                "QT_SVG_LIB"
+            ],
+            "compilerPath": "C:/Qt/Qt5.12.12/Tools/mingw730_64/bin/g++.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}

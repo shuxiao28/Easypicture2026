@@ -1,0 +1,17 @@
+debug/main.o
+debug/Shape.o
+debug/Triangle.o
+debug/Rectangle.o
+debug/Ellipse.o
+debug/Polygon.o
+debug/Curve.o
+debug/GraphicsScene.o
+debug/GraphicsView.o
+debug/MainWindow.o
+debug/FileManager.o
+debug/ShapeFactory.o
+debug/qrc_resources.o
+debug/moc_GraphicsScene.o
+debug/moc_GraphicsView.o
+debug/moc_MainWindow.o
+debug/moc_FileManager.o
