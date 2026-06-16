@@ -37,7 +37,8 @@ INCLUDEPATH += $$PWD/include
 RESOURCES += \
     resources/resources.qrc
 
-FORMS +=
+FORMS += \
+    ui/mainwindow.ui
 
 CONFIG += c++11
 

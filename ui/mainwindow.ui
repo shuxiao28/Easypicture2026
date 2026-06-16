@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>EasyPicture 2026</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="centralLayout"/>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1000</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>编辑</string>
+    </property>
+    <addaction name="actionClearCanvas"/>
+    <addaction name="actionDeleteSelected"/>
+   </widget>
+   <widget class="QMenu" name="menuDraw">
+    <property name="title">
+     <string>绘制</string>
+    </property>
+    <addaction name="actionSelect"/>
+    <addaction name="separator"/>
+    <addaction name="actionTriangle"/>
+    <addaction name="actionRectangle"/>
+    <addaction name="actionEllipse"/>
+    <addaction name="actionPolygon"/>
+    <addaction name="actionCurve"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuDraw"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="windowTitle">
+    <string>文件操作</string>
+   </property>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionExit"/>
+  </widget>
+  <widget class="QToolBar" name="drawToolBar">
+   <property name="windowTitle">
+    <string>绘制工具</string>
+   </property>
+   <addaction name="actionSelect"/>
+   <addaction name="separator"/>
+   <addaction name="actionTriangle"/>
+   <addaction name="actionRectangle"/>
+   <addaction name="actionEllipse"/>
+   <addaction name="actionPolygon"/>
+   <addaction name="actionCurve"/>
+  </widget>
+  <widget class="QToolBar" name="propertyToolBar">
+   <property name="windowTitle">
+    <string>属性设置</string>
+   </property>
+   <addaction name="actionPenColor"/>
+   <addaction name="actionFillColor"/>
+   <widget class="QSpinBox" name="penWidthSpinBox">
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>20</number>
+    </property>
+    <property name="value">
+     <number>2</number>
+    </property>
+    <property name="fixedWidth">
+     <number>60</number>
+    </property>
+   </widget>
+   <addaction name="separator"/>
+   <addaction name="actionClearCanvas"/>
+   <addaction name="actionDeleteSelected"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionNew">
+   <property name="text">
+    <string>新建</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>打开</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>保存</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionSelect">
+   <property name="text">
+    <string>选择</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionTriangle">
+   <property name="text">
+    <string>三角形</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionRectangle">
+   <property name="text">
+    <string>矩形</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionEllipse">
+   <property name="text">
+    <string>椭圆</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionPolygon">
+   <property name="text">
+    <string>多边形</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionCurve">
+   <property name="text">
+    <string>曲线</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionPenColor">
+   <property name="text">
+    <string>线条颜色</string>
+   </property>
+  </action>
+  <action name="actionFillColor">
+   <property name="text">
+    <string>填充颜色</string>
+   </property>
+  </action>
+  <action name="actionClearCanvas">
+   <property name="text">
+    <string>清空画布</string>
+   </property>
+  </action>
+  <action name="actionDeleteSelected">
+   <property name="text">
+    <string>删除选中</string>
+   </property>
+   <property name="shortcut">
+    <string>Delete</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionNew</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionNew_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionOpen</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionOpen_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionSave</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionSave_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionExit_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionSelect</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionSelect_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionTriangle</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionTriangle_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionRectangle</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionRectangle_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionEllipse</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionEllipse_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionPolygon</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionPolygon_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionCurve</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionCurve_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionPenColor</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionPenColor_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionFillColor</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionFillColor_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>penWidthSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_penWidthSpinBox_valueChanged(int)</slot>
+  </connection>
+  <connection>
+   <sender>actionClearCanvas</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionClearCanvas_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionDeleteSelected</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionDeleteSelected_triggered()</slot>
+  </connection>
+ </connections>
+</ui>
