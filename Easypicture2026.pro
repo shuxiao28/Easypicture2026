@@ -1,4 +1,10 @@
+#-------------------------------------------------
+# EasyPicture 2026 - Qt Vector Graphics Editor
+#-------------------------------------------------
+
 QT       += core gui widgets svg
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Easypicture2026
 TEMPLATE = app
@@ -30,7 +36,8 @@ HEADERS += \
     include/GraphicsView.h \
     include/MainWindow.h \
     include/FileManager.h \
-    include/ShapeFactory.h
+    include/ShapeFactory.h \
+    ui_mainwindow.h
 
 INCLUDEPATH += $$PWD/include
 
@@ -44,3 +51,12 @@ CONFIG += c++11
 
 QMAKE_CXXFLAGS += -Wall -Wextra
 
+win32 {
+    QMAKE_CXXFLAGS += -D_WIN32_WINNT=0x0601
+}
+
+unix {
+    QMAKE_CXXFLAGS += -fPIC
+}
+
+contains(QT_CONFIG, svg): QT += svg

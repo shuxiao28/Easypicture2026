@@ -1,10 +1,13 @@
-# Qt build directories
-build/
+# Qt Creator build directories
+build*/
 debug/
 release/
 *.pro.user
 *.qbs.user
 *.qbs.cache
+.qmake.stash
+Makefile*
+object_script.*
 
 # Compiled files
 *.o
@@ -13,6 +16,8 @@ release/
 *_moc.cpp
 *_ui.h
 *.qrc.cpp
+moc_*.cpp
+ui_*.h
 
 # Executables
 *.exe
@@ -24,12 +29,22 @@ release/
 # Qt Creator settings
 .settings/
 *.autosave
+.idea/
+.vscode/
 
 # OS files
 .DS_Store
 Thumbs.db
 *.bak
 *.backup
+*~
 
-# Logs
+# Logs and temp files
 *.log
+*.tmp
+*.temp
+
+# Build artifacts
+*.ilk
+*.pdb
+*.manifest

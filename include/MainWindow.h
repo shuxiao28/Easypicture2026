@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "../ui_mainwindow.h"
+#include "ui_mainwindow.h"
 #include "GraphicsScene.h"
 #include "GraphicsView.h"
 #include <QActionGroup>
