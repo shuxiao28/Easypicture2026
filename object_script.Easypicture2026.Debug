@@ -16,4 +16,3 @@ debug/moc_GraphicsScene.o
 debug/moc_GraphicsView.o
 debug/moc_MainWindow.o
 debug/moc_FileManager.o
-debug/moc_CanvasManager.o

@@ -39,6 +39,15 @@ MainWindow::MainWindow(QWidget* parent)
     ui->penWidthSpinBox->setValue(m_penWidth);
     
     m_canvasManager->addCanvas("Canvas 1");
+    QListWidgetItem* firstCanvas = new QListWidgetItem("Canvas 1");
+    firstCanvas->setFlags(firstCanvas->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    ui->canvasListWidget->addItem(firstCanvas);
+    ui->canvasListWidget->setCurrentItem(firstCanvas);
+    
+    m_scene = m_canvasManager->currentScene();
+    if (m_view && m_scene) {
+        m_view->setScene(m_scene);
+    }
 }
 
 MainWindow::~MainWindow() {
@@ -219,26 +228,129 @@ void MainWindow::setupCanvasList() {
             this, &MainWindow::onRenameCanvas);
 }
 
+QIcon MainWindow::createShapeIcon(Shape::ShapeType type) {
+    QPixmap pixmap(24, 24);
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+    painter.setPen(QPen(Qt::black, 2));
+    painter.setBrush(Qt::white);
+    
+    switch (type) {
+    case Shape::Triangle: {
+        QPolygon polygon;
+        polygon << QPoint(12, 2) << QPoint(22, 20) << QPoint(2, 20);
+        painter.drawPolygon(polygon);
+        break;
+    }
+    case Shape::Rectangle:
+        painter.drawRect(2, 4, 20, 16);
+        break;
+    case Shape::Ellipse:
+        painter.drawEllipse(2, 4, 20, 16);
+        break;
+    case Shape::Polygon: {
+        QPolygon polygon;
+        polygon << QPoint(12, 2) << QPoint(22, 10) << QPoint(18, 22) << QPoint(6, 22) << QPoint(2, 10);
+        painter.drawPolygon(polygon);
+        break;
+    }
+    case Shape::Curve: {
+        QPainterPath path;
+        path.moveTo(2, 12);
+        path.cubicTo(6, 2, 18, 22, 22, 12);
+        painter.drawPath(path);
+        break;
+    }
+    }
+    
+    return QIcon(pixmap);
+}
+
+QIcon MainWindow::createActionIcon(const QString& actionName) {
+    QPixmap pixmap(24, 24);
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+    painter.setPen(QPen(Qt::black, 2));
+    painter.setBrush(Qt::white);
+    
+    if (actionName == "select") {
+        painter.drawRect(2, 2, 10, 10);
+        painter.drawLine(12, 12, 20, 20);
+        painter.drawLine(20, 12, 12, 20);
+    } else if (actionName == "delete") {
+        painter.drawRect(4, 6, 16, 12);
+        painter.drawLine(6, 6, 18, 18);
+        painter.drawLine(18, 6, 6, 18);
+    } else if (actionName == "new") {
+        painter.drawRect(4, 4, 16, 16);
+        painter.drawLine(4, 12, 20, 12);
+        painter.drawLine(12, 4, 12, 20);
+    } else if (actionName == "save") {
+        painter.drawRect(4, 8, 16, 12);
+        painter.drawLine(4, 8, 12, 2);
+        painter.drawLine(12, 2, 20, 8);
+    } else if (actionName == "open") {
+        painter.drawRect(4, 6, 16, 14);
+        painter.drawRect(8, 2, 8, 8);
+    } else if (actionName == "moveup") {
+        painter.drawLine(12, 4, 12, 18);
+        painter.drawLine(12, 4, 6, 10);
+        painter.drawLine(12, 4, 18, 10);
+    } else if (actionName == "movedown") {
+        painter.drawLine(12, 6, 12, 20);
+        painter.drawLine(12, 20, 6, 14);
+        painter.drawLine(12, 20, 18, 14);
+    } else if (actionName == "moveleft") {
+        painter.drawLine(6, 12, 20, 12);
+        painter.drawLine(6, 12, 12, 6);
+        painter.drawLine(6, 12, 12, 18);
+    } else if (actionName == "moveright") {
+        painter.drawLine(4, 12, 18, 12);
+        painter.drawLine(18, 12, 12, 6);
+        painter.drawLine(18, 12, 12, 18);
+    } else if (actionName == "rotatecw") {
+        painter.drawArc(4, 4, 16, 16, 90 * 16, -270 * 16);
+        painter.drawLine(12, 6, 12, 2);
+        painter.drawLine(12, 6, 16, 4);
+    } else if (actionName == "rotateccw") {
+        painter.drawArc(4, 4, 16, 16, 90 * 16, 270 * 16);
+        painter.drawLine(12, 6, 12, 2);
+        painter.drawLine(12, 6, 8, 4);
+    } else if (actionName == "pencolor") {
+        painter.setBrush(QColor(255, 0, 0));
+        painter.drawEllipse(4, 4, 16, 16);
+    } else if (actionName == "fillcolor") {
+        painter.setBrush(QColor(0, 255, 0));
+        painter.drawRect(4, 4, 16, 16);
+    } else if (actionName == "clear") {
+        painter.drawRect(4, 4, 16, 16);
+        painter.drawLine(4, 4, 20, 20);
+        painter.drawLine(20, 4, 4, 20);
+    }
+    
+    return QIcon(pixmap);
+}
+
 void MainWindow::setupIcons() {
-    ui->actionSelect->setIcon(QIcon::fromTheme("cursor"));
-    ui->actionTriangle->setIcon(QIcon::fromTheme("shape-triangle"));
-    ui->actionRectangle->setIcon(QIcon::fromTheme("shape-square"));
-    ui->actionEllipse->setIcon(QIcon::fromTheme("shape-circle"));
-    ui->actionPolygon->setIcon(QIcon::fromTheme("shape-polygon"));
-    ui->actionCurve->setIcon(QIcon::fromTheme("curve"));
-    ui->actionDeleteSelected->setIcon(QIcon::fromTheme("edit-delete"));
-    ui->actionNew->setIcon(QIcon::fromTheme("document-new"));
-    ui->actionSave->setIcon(QIcon::fromTheme("document-save"));
-    ui->actionOpen->setIcon(QIcon::fromTheme("document-open"));
-    ui->actionMoveUp->setIcon(QIcon::fromTheme("arrow-up"));
-    ui->actionMoveDown->setIcon(QIcon::fromTheme("arrow-down"));
-    ui->actionMoveLeft->setIcon(QIcon::fromTheme("arrow-left"));
-    ui->actionMoveRight->setIcon(QIcon::fromTheme("arrow-right"));
-    ui->actionRotateCW->setIcon(QIcon::fromTheme("rotate-cw"));
-    ui->actionRotateCCW->setIcon(QIcon::fromTheme("rotate-ccw"));
-    ui->actionPenColor->setIcon(QIcon::fromTheme("color-picker"));
-    ui->actionFillColor->setIcon(QIcon::fromTheme("fill-color"));
-    ui->actionClearCanvas->setIcon(QIcon::fromTheme("edit-clear"));
+    ui->actionSelect->setIcon(createActionIcon("select"));
+    ui->actionTriangle->setIcon(createShapeIcon(Shape::Triangle));
+    ui->actionRectangle->setIcon(createShapeIcon(Shape::Rectangle));
+    ui->actionEllipse->setIcon(createShapeIcon(Shape::Ellipse));
+    ui->actionPolygon->setIcon(createShapeIcon(Shape::Polygon));
+    ui->actionCurve->setIcon(createShapeIcon(Shape::Curve));
+    ui->actionDeleteSelected->setIcon(createActionIcon("delete"));
+    ui->actionNew->setIcon(createActionIcon("new"));
+    ui->actionSave->setIcon(createActionIcon("save"));
+    ui->actionOpen->setIcon(createActionIcon("open"));
+    ui->actionMoveUp->setIcon(createActionIcon("moveup"));
+    ui->actionMoveDown->setIcon(createActionIcon("movedown"));
+    ui->actionMoveLeft->setIcon(createActionIcon("moveleft"));
+    ui->actionMoveRight->setIcon(createActionIcon("moveright"));
+    ui->actionRotateCW->setIcon(createActionIcon("rotatecw"));
+    ui->actionRotateCCW->setIcon(createActionIcon("rotateccw"));
+    ui->actionPenColor->setIcon(createActionIcon("pencolor"));
+    ui->actionFillColor->setIcon(createActionIcon("fillcolor"));
+    ui->actionClearCanvas->setIcon(createActionIcon("clear"));
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
@@ -254,21 +366,56 @@ void MainWindow::contextMenuEvent(QContextMenuEvent* event) {
 }
 
 bool MainWindow::maybeSave() {
-    if (m_hasUnsavedChanges || (m_scene && !m_scene->shapes().isEmpty())) {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, "保存提示",
-            "当前有未保存的内容，是否保存？",
-            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        
-        if (reply == QMessageBox::Save) {
-            on_actionSave_triggered();
-            return !m_hasUnsavedChanges; // 如果保存成功则返回true
-        } else if (reply == QMessageBox::Discard) {
-            return true;
-        } else {
-            return false;
+    bool hasShapes = false;
+    for (int i = 0; i < m_canvasManager->canvasCount(); ++i) {
+        GraphicsScene* scene = m_canvasManager->currentScene();
+        if (scene && !scene->shapes().isEmpty()) {
+            hasShapes = true;
+            break;
         }
     }
-    return true;
+    
+    if (!m_hasUnsavedChanges && !hasShapes) {
+        return true;
+    }
+    
+    QString message = "当前画布有未保存的图形内容";
+    if (!m_currentFilePath.isEmpty()) {
+        message += QString("，当前文件路径：%1").arg(m_currentFilePath);
+    }
+    message += "。是否保存？";
+    
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "退出提示",
+        message,
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    
+    if (reply == QMessageBox::Save) {
+        if (m_currentFilePath.isEmpty()) {
+            QString filePath = QFileDialog::getSaveFileName(this, "保存文件",
+                QDir::homePath(), "矢量图形文件 (*.svg);;所有文件 (*.*)");
+            
+            if (!filePath.isEmpty()) {
+                if (!filePath.endsWith(".svg", Qt::CaseInsensitive)) {
+                    filePath += ".svg";
+                }
+                m_currentFilePath = filePath;
+            } else {
+                return false;
+            }
+        }
+        
+        bool prevHasUnsaved = m_hasUnsavedChanges;
+        on_actionSave_triggered();
+        
+        if (prevHasUnsaved && m_hasUnsavedChanges) {
+            return false;
+        }
+        return true;
+    } else if (reply == QMessageBox::Discard) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void MainWindow::on_actionMoveUp_triggered() {

@@ -12,9 +12,13 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -47,17 +51,25 @@ public:
     QAction *actionRotateCW;
     QAction *actionRotateCCW;
     QWidget *centralWidget;
-    QVBoxLayout *centralLayout;
+    QHBoxLayout *centralLayout;
+    QWidget *canvasPanel;
+    QVBoxLayout *canvasPanelLayout;
+    QListWidget *canvasListWidget;
+    QPushButton *addCanvasButton;
+    QPushButton *removeCanvasButton;
+    QPushButton *renameCanvasButton;
+    QWidget *drawArea;
+    QVBoxLayout *drawAreaLayout;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuEdit;
     QMenu *menuDraw;
     QMenu *menuTransform;
-    QToolBar *mainToolBar;
     QToolBar *drawToolBar;
     QToolBar *propertyToolBar;
+    QLabel *colorLabel;
+    QLabel *penWidthLabel;
     QSpinBox *penWidthSpinBox;
-    QToolBar *transformToolBar;
     QSpinBox *translateDistanceSpinBox;
     QSpinBox *rotateAngleSpinBox;
     QStatusBar *statusBar;
@@ -209,10 +221,55 @@ public:
         actionRotateCCW->setObjectName(QString::fromUtf8("actionRotateCCW"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        centralLayout = new QVBoxLayout(centralWidget);
+        centralLayout = new QHBoxLayout(centralWidget);
         centralLayout->setSpacing(6);
         centralLayout->setContentsMargins(11, 11, 11, 11);
         centralLayout->setObjectName(QString::fromUtf8("centralLayout"));
+        canvasPanel = new QWidget(centralWidget);
+        canvasPanel->setObjectName(QString::fromUtf8("canvasPanel"));
+        canvasPanelLayout = new QVBoxLayout(canvasPanel);
+        canvasPanelLayout->setSpacing(6);
+        canvasPanelLayout->setContentsMargins(11, 11, 11, 11);
+        canvasPanelLayout->setObjectName(QString::fromUtf8("canvasPanelLayout"));
+        canvasPanelLayout->setContentsMargins(0, 0, 0, 0);
+        canvasListWidget = new QListWidget(canvasPanel);
+        canvasListWidget->setObjectName(QString::fromUtf8("canvasListWidget"));
+
+        canvasPanelLayout->addWidget(canvasListWidget);
+
+        addCanvasButton = new QPushButton(canvasPanel);
+        addCanvasButton->setObjectName(QString::fromUtf8("addCanvasButton"));
+
+        canvasPanelLayout->addWidget(addCanvasButton);
+
+        removeCanvasButton = new QPushButton(canvasPanel);
+        removeCanvasButton->setObjectName(QString::fromUtf8("removeCanvasButton"));
+
+        canvasPanelLayout->addWidget(removeCanvasButton);
+
+        renameCanvasButton = new QPushButton(canvasPanel);
+        renameCanvasButton->setObjectName(QString::fromUtf8("renameCanvasButton"));
+
+        canvasPanelLayout->addWidget(renameCanvasButton);
+
+
+        centralLayout->addWidget(canvasPanel);
+
+        drawArea = new QWidget(centralWidget);
+        drawArea->setObjectName(QString::fromUtf8("drawArea"));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(1);
+        sizePolicy.setVerticalStretch(1);
+        sizePolicy.setHeightForWidth(drawArea->sizePolicy().hasHeightForWidth());
+        drawArea->setSizePolicy(sizePolicy);
+        drawAreaLayout = new QVBoxLayout(drawArea);
+        drawAreaLayout->setSpacing(6);
+        drawAreaLayout->setContentsMargins(0, 0, 0, 0);
+        drawAreaLayout->setObjectName(QString::fromUtf8("drawAreaLayout"));
+        drawAreaLayout->setContentsMargins(0, 0, 0, 0);
+
+        centralLayout->addWidget(drawArea);
+
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -226,14 +283,18 @@ public:
         menuTransform = new QMenu(menuBar);
         menuTransform->setObjectName(QString::fromUtf8("menuTransform"));
         MainWindow->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(MainWindow);
-        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
-        MainWindow->addToolBar(mainToolBar);
         drawToolBar = new QToolBar(MainWindow);
         drawToolBar->setObjectName(QString::fromUtf8("drawToolBar"));
         MainWindow->addToolBar(drawToolBar);
         propertyToolBar = new QToolBar(MainWindow);
         propertyToolBar->setObjectName(QString::fromUtf8("propertyToolBar"));
+        propertyToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
+        colorLabel = new QLabel(propertyToolBar);
+        colorLabel->setObjectName(QString::fromUtf8("colorLabel"));
+        propertyToolBar->addWidget(colorLabel);
+        penWidthLabel = new QLabel(propertyToolBar);
+        penWidthLabel->setObjectName(QString::fromUtf8("penWidthLabel"));
+        propertyToolBar->addWidget(penWidthLabel);
         penWidthSpinBox = new QSpinBox(propertyToolBar);
         penWidthSpinBox->setObjectName(QString::fromUtf8("penWidthSpinBox"));
         penWidthSpinBox->setMinimum(1);
@@ -241,24 +302,21 @@ public:
         penWidthSpinBox->setValue(2);
         penWidthSpinBox->setFixedWidth(60);
         propertyToolBar->addWidget(penWidthSpinBox);
-        MainWindow->addToolBar(propertyToolBar);
-        transformToolBar = new QToolBar(MainWindow);
-        transformToolBar->setObjectName(QString::fromUtf8("transformToolBar"));
-        translateDistanceSpinBox = new QSpinBox(transformToolBar);
+        translateDistanceSpinBox = new QSpinBox(propertyToolBar);
         translateDistanceSpinBox->setObjectName(QString::fromUtf8("translateDistanceSpinBox"));
         translateDistanceSpinBox->setMinimum(1);
         translateDistanceSpinBox->setMaximum(100);
         translateDistanceSpinBox->setValue(10);
         translateDistanceSpinBox->setFixedWidth(60);
-        transformToolBar->addWidget(translateDistanceSpinBox);
-        rotateAngleSpinBox = new QSpinBox(transformToolBar);
+        propertyToolBar->addWidget(translateDistanceSpinBox);
+        rotateAngleSpinBox = new QSpinBox(propertyToolBar);
         rotateAngleSpinBox->setObjectName(QString::fromUtf8("rotateAngleSpinBox"));
         rotateAngleSpinBox->setMinimum(1);
         rotateAngleSpinBox->setMaximum(90);
         rotateAngleSpinBox->setValue(15);
         rotateAngleSpinBox->setFixedWidth(60);
-        transformToolBar->addWidget(rotateAngleSpinBox);
-        MainWindow->addToolBar(transformToolBar);
+        propertyToolBar->addWidget(rotateAngleSpinBox);
+        MainWindow->addToolBar(propertyToolBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainWindow->setStatusBar(statusBar);
@@ -272,8 +330,6 @@ public:
         menuFile->addAction(actionSave);
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
-        menuEdit->addAction(actionClearCanvas);
-        menuEdit->addAction(actionDeleteSelected);
         menuDraw->addAction(actionSelect);
         menuDraw->addSeparator();
         menuDraw->addAction(actionTriangle);
@@ -288,11 +344,6 @@ public:
         menuTransform->addSeparator();
         menuTransform->addAction(actionRotateCW);
         menuTransform->addAction(actionRotateCCW);
-        mainToolBar->addAction(actionNew);
-        mainToolBar->addAction(actionOpen);
-        mainToolBar->addAction(actionSave);
-        mainToolBar->addSeparator();
-        mainToolBar->addAction(actionExit);
         drawToolBar->addAction(actionSelect);
         drawToolBar->addSeparator();
         drawToolBar->addAction(actionTriangle);
@@ -300,42 +351,21 @@ public:
         drawToolBar->addAction(actionEllipse);
         drawToolBar->addAction(actionPolygon);
         drawToolBar->addAction(actionCurve);
+        drawToolBar->addSeparator();
+        drawToolBar->addAction(actionMoveUp);
+        drawToolBar->addAction(actionMoveDown);
+        drawToolBar->addAction(actionMoveLeft);
+        drawToolBar->addAction(actionMoveRight);
+        drawToolBar->addSeparator();
+        drawToolBar->addAction(actionRotateCW);
+        drawToolBar->addAction(actionRotateCCW);
         propertyToolBar->addAction(actionPenColor);
         propertyToolBar->addAction(actionFillColor);
         propertyToolBar->addSeparator();
         propertyToolBar->addAction(actionClearCanvas);
         propertyToolBar->addAction(actionDeleteSelected);
-        transformToolBar->addSeparator();
-        transformToolBar->addAction(actionMoveUp);
-        transformToolBar->addAction(actionMoveDown);
-        transformToolBar->addAction(actionMoveLeft);
-        transformToolBar->addAction(actionMoveRight);
-        transformToolBar->addSeparator();
-        transformToolBar->addAction(actionRotateCW);
-        transformToolBar->addAction(actionRotateCCW);
 
         retranslateUi(MainWindow);
-        QObject::connect(actionNew, SIGNAL(triggered()), MainWindow, SLOT(on_actionNew_triggered()));
-        QObject::connect(actionOpen, SIGNAL(triggered()), MainWindow, SLOT(on_actionOpen_triggered()));
-        QObject::connect(actionSave, SIGNAL(triggered()), MainWindow, SLOT(on_actionSave_triggered()));
-        QObject::connect(actionExit, SIGNAL(triggered()), MainWindow, SLOT(on_actionExit_triggered()));
-        QObject::connect(actionSelect, SIGNAL(triggered()), MainWindow, SLOT(on_actionSelect_triggered()));
-        QObject::connect(actionTriangle, SIGNAL(triggered()), MainWindow, SLOT(on_actionTriangle_triggered()));
-        QObject::connect(actionRectangle, SIGNAL(triggered()), MainWindow, SLOT(on_actionRectangle_triggered()));
-        QObject::connect(actionEllipse, SIGNAL(triggered()), MainWindow, SLOT(on_actionEllipse_triggered()));
-        QObject::connect(actionPolygon, SIGNAL(triggered()), MainWindow, SLOT(on_actionPolygon_triggered()));
-        QObject::connect(actionCurve, SIGNAL(triggered()), MainWindow, SLOT(on_actionCurve_triggered()));
-        QObject::connect(actionPenColor, SIGNAL(triggered()), MainWindow, SLOT(on_actionPenColor_triggered()));
-        QObject::connect(actionFillColor, SIGNAL(triggered()), MainWindow, SLOT(on_actionFillColor_triggered()));
-        QObject::connect(penWidthSpinBox, SIGNAL(valueChanged(int)), MainWindow, SLOT(on_penWidthSpinBox_valueChanged(int)));
-        QObject::connect(actionClearCanvas, SIGNAL(triggered()), MainWindow, SLOT(on_actionClearCanvas_triggered()));
-        QObject::connect(actionDeleteSelected, SIGNAL(triggered()), MainWindow, SLOT(on_actionDeleteSelected_triggered()));
-        QObject::connect(actionMoveUp, SIGNAL(triggered()), MainWindow, SLOT(on_actionMoveUp_triggered()));
-        QObject::connect(actionMoveDown, SIGNAL(triggered()), MainWindow, SLOT(on_actionMoveDown_triggered()));
-        QObject::connect(actionMoveLeft, SIGNAL(triggered()), MainWindow, SLOT(on_actionMoveLeft_triggered()));
-        QObject::connect(actionMoveRight, SIGNAL(triggered()), MainWindow, SLOT(on_actionMoveRight_triggered()));
-        QObject::connect(actionRotateCW, SIGNAL(triggered()), MainWindow, SLOT(on_actionRotateCW_triggered()));
-        QObject::connect(actionRotateCCW, SIGNAL(triggered()), MainWindow, SLOT(on_actionRotateCCW_triggered()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -396,14 +426,17 @@ public:
 #ifndef QT_NO_SHORTCUT
         actionRotateCCW->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+R", nullptr));
 #endif // QT_NO_SHORTCUT
+        addCanvasButton->setText(QApplication::translate("MainWindow", "+ \346\267\273\345\212\240\347\224\273\345\270\203", nullptr));
+        removeCanvasButton->setText(QApplication::translate("MainWindow", "- \345\210\240\351\231\244\347\224\273\345\270\203", nullptr));
+        renameCanvasButton->setText(QApplication::translate("MainWindow", "\351\207\215\345\221\275\345\220\215", nullptr));
         menuFile->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
         menuEdit->setTitle(QApplication::translate("MainWindow", "\347\274\226\350\276\221", nullptr));
         menuDraw->setTitle(QApplication::translate("MainWindow", "\347\273\230\345\210\266", nullptr));
         menuTransform->setTitle(QApplication::translate("MainWindow", "\345\217\230\346\215\242", nullptr));
-        mainToolBar->setWindowTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266\346\223\215\344\275\234", nullptr));
         drawToolBar->setWindowTitle(QApplication::translate("MainWindow", "\347\273\230\345\210\266\345\267\245\345\205\267", nullptr));
         propertyToolBar->setWindowTitle(QApplication::translate("MainWindow", "\345\261\236\346\200\247\350\256\276\347\275\256", nullptr));
-        transformToolBar->setWindowTitle(QApplication::translate("MainWindow", "\345\217\230\346\215\242\345\267\245\345\205\267", nullptr));
+        colorLabel->setText(QApplication::translate("MainWindow", "\347\272\277\346\235\241\351\242\234\350\211\262/\345\241\253\345\205\205\351\242\234\350\211\262:", nullptr));
+        penWidthLabel->setText(QApplication::translate("MainWindow", "\347\272\277\345\256\275:", nullptr));
     } // retranslateUi
 
 };

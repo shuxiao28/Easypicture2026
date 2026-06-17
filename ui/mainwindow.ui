@@ -107,7 +107,53 @@ QLabel {
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="centralLayout"/>
+   <layout class="QHBoxLayout" name="centralLayout">
+    <item>
+     <widget class="QWidget" name="canvasPanel">
+      <layout class="QVBoxLayout" name="canvasPanelLayout">
+       <item>
+        <widget class="QListWidget" name="canvasListWidget"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="addCanvasButton">
+         <property name="text">
+          <string>+ 添加画布</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="removeCanvasButton">
+         <property name="text">
+          <string>- 删除画布</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="renameCanvasButton">
+         <property name="text">
+          <string>重命名</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="drawArea">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>1</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QVBoxLayout" name="drawAreaLayout">
+       <property name="margin">
+        <number>0</number>
+       </property>
+      </layout>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -132,8 +178,6 @@ QLabel {
     <property name="title">
      <string>编辑</string>
     </property>
-    <addaction name="actionClearCanvas"/>
-    <addaction name="actionDeleteSelected"/>
    </widget>
    <widget class="QMenu" name="menuDraw">
     <property name="title">
@@ -164,16 +208,7 @@ QLabel {
    <addaction name="menuDraw"/>
    <addaction name="menuTransform"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <property name="windowTitle">
-    <string>文件操作</string>
-   </property>
-   <addaction name="actionNew"/>
-   <addaction name="actionOpen"/>
-   <addaction name="actionSave"/>
-   <addaction name="separator"/>
-   <addaction name="actionExit"/>
-  </widget>
+
   <widget class="QToolBar" name="drawToolBar">
    <property name="windowTitle">
     <string>绘制工具</string>
@@ -185,13 +220,34 @@ QLabel {
    <addaction name="actionEllipse"/>
    <addaction name="actionPolygon"/>
    <addaction name="actionCurve"/>
+   <addaction name="separator"/>
+   <addaction name="actionMoveUp"/>
+   <addaction name="actionMoveDown"/>
+   <addaction name="actionMoveLeft"/>
+   <addaction name="actionMoveRight"/>
+   <addaction name="separator"/>
+   <addaction name="actionRotateCW"/>
+   <addaction name="actionRotateCCW"/>
   </widget>
   <widget class="QToolBar" name="propertyToolBar">
    <property name="windowTitle">
     <string>属性设置</string>
    </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextOnly</enum>
+   </property>
+   <widget class="QLabel" name="colorLabel">
+    <property name="text">
+     <string>线条颜色/填充颜色:</string>
+    </property>
+   </widget>
    <addaction name="actionPenColor"/>
    <addaction name="actionFillColor"/>
+   <widget class="QLabel" name="penWidthLabel">
+    <property name="text">
+     <string>线宽:</string>
+    </property>
+   </widget>
    <widget class="QSpinBox" name="penWidthSpinBox">
     <property name="minimum">
      <number>1</number>
@@ -206,14 +262,6 @@ QLabel {
      <number>60</number>
     </property>
    </widget>
-   <addaction name="separator"/>
-   <addaction name="actionClearCanvas"/>
-   <addaction name="actionDeleteSelected"/>
-  </widget>
-  <widget class="QToolBar" name="transformToolBar">
-   <property name="windowTitle">
-    <string>变换工具</string>
-   </property>
    <widget class="QSpinBox" name="translateDistanceSpinBox">
     <property name="minimum">
      <number>1</number>
@@ -243,13 +291,8 @@ QLabel {
     </property>
    </widget>
    <addaction name="separator"/>
-   <addaction name="actionMoveUp"/>
-   <addaction name="actionMoveDown"/>
-   <addaction name="actionMoveLeft"/>
-   <addaction name="actionMoveRight"/>
-   <addaction name="separator"/>
-   <addaction name="actionRotateCW"/>
-   <addaction name="actionRotateCCW"/>
+   <addaction name="actionClearCanvas"/>
+   <addaction name="actionDeleteSelected"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -409,132 +452,4 @@ QLabel {
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>actionNew</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionNew_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionOpen</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionOpen_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionSave</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionSave_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionExit</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionExit_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionSelect</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionSelect_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionTriangle</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionTriangle_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionRectangle</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionRectangle_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionEllipse</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionEllipse_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionPolygon</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionPolygon_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionCurve</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionCurve_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionPenColor</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionPenColor_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionFillColor</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionFillColor_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>penWidthSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_penWidthSpinBox_valueChanged(int)</slot>
-  </connection>
-  <connection>
-   <sender>actionClearCanvas</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionClearCanvas_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionDeleteSelected</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionDeleteSelected_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionMoveUp</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionMoveUp_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionMoveDown</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionMoveDown_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionMoveLeft</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionMoveLeft_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionMoveRight</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionMoveRight_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionRotateCW</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionRotateCW_triggered()</slot>
-  </connection>
-  <connection>
-   <sender>actionRotateCCW</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>on_actionRotateCCW_triggered()</slot>
-  </connection>
- </connections>
 </ui>

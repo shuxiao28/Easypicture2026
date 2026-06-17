@@ -5,6 +5,7 @@
 #include <QActionGroup>
 #include <QCloseEvent>
 #include <QContextMenuEvent>
+#include <QListWidgetItem>
 #include "ui_mainwindow.h"
 #include "GraphicsScene.h"
 #include "GraphicsView.h"
@@ -56,7 +57,6 @@ private slots:
     void showShapeContextMenu(const QPoint& pos);
     void onEditShapeProperties();
     
-    // 监听场景变化
     void onSceneChanged();
 
 private:
@@ -64,6 +64,8 @@ private:
     void setupTransformActions();
     void setupCanvasList();
     void setupIcons();
+    QIcon createShapeIcon(Shape::ShapeType type);
+    QIcon createActionIcon(const QString& actionName);
     bool maybeSave();
     
     Ui::MainWindow* ui;
@@ -78,8 +80,8 @@ private:
     int m_translateDistance;
     int m_rotateAngle;
     
-    bool m_hasUnsavedChanges;  // 未保存修改标志
-    QString m_currentFilePath; // 当前文件路径
+    bool m_hasUnsavedChanges;
+    QString m_currentFilePath;
 };
 
 #endif
