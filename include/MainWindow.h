@@ -55,6 +55,9 @@ private slots:
     void updateStatusBar();
     void showShapeContextMenu(const QPoint& pos);
     void onEditShapeProperties();
+    
+    // 监听场景变化
+    void onSceneChanged();
 
 private:
     void setupCanvasManager();
@@ -73,6 +76,9 @@ private:
     int m_penWidth;
     int m_translateDistance;
     int m_rotateAngle;
+    
+    bool m_hasUnsavedChanges;  // 未保存修改标志
+    QString m_currentFilePath; // 当前文件路径
 };
 
 #endif

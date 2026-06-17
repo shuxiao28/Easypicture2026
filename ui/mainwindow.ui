@@ -6,12 +6,105 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>700</height>
+    <width>1200</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>EasyPicture 2026</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background-color: #f5f5f5;
+}
+QToolBar {
+    background-color: #e8e8e8;
+    border: 1px solid #d0d0d0;
+    spacing: 5px;
+    padding: 3px;
+}
+QToolBar QToolButton {
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 5px;
+    min-width: 30px;
+    min-height: 30px;
+}
+QToolBar QToolButton:hover {
+    background-color: #d4e6f1;
+    border: 1px solid #b8d4e8;
+}
+QToolBar QToolButton:checked {
+    background-color: #3498db;
+    color: white;
+    border: 1px solid #2980b9;
+}
+QMenuBar {
+    background-color: #e8e8e8;
+    border-bottom: 1px solid #d0d0d0;
+}
+QMenuBar::item {
+    padding: 5px 10px;
+    background-color: transparent;
+}
+QMenuBar::item:selected {
+    background-color: #d4e6f1;
+}
+QMenu {
+    background-color: #ffffff;
+    border: 1px solid #d0d0d0;
+}
+QMenu::item {
+    padding: 5px 30px;
+}
+QMenu::item:selected {
+    background-color: #3498db;
+    color: white;
+}
+QStatusBar {
+    background-color: #e8e8e8;
+    border-top: 1px solid #d0d0d0;
+}
+QSpinBox {
+    background-color: white;
+    border: 1px solid #c0c0c0;
+    border-radius: 3px;
+    padding: 2px;
+}
+QSpinBox:focus {
+    border: 1px solid #3498db;
+}
+QListWidget {
+    background-color: white;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+}
+QListWidget::item {
+    padding: 5px;
+    border-bottom: 1px solid #e0e0e0;
+}
+QListWidget::item:selected {
+    background-color: #3498db;
+    color: white;
+}
+QPushButton {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    min-width: 80px;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}
+QPushButton:pressed {
+    background-color: #1c6ea4;
+}
+QLabel {
+    color: #333333;
+}</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="centralLayout"/>
@@ -21,7 +114,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1000</width>
+     <width>1200</width>
      <height>23</height>
     </rect>
    </property>
@@ -54,9 +147,22 @@
     <addaction name="actionPolygon"/>
     <addaction name="actionCurve"/>
    </widget>
+   <widget class="QMenu" name="menuTransform">
+    <property name="title">
+     <string>变换</string>
+    </property>
+    <addaction name="actionMoveUp"/>
+    <addaction name="actionMoveDown"/>
+    <addaction name="actionMoveLeft"/>
+    <addaction name="actionMoveRight"/>
+    <addaction name="separator"/>
+    <addaction name="actionRotateCW"/>
+    <addaction name="actionRotateCCW"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuDraw"/>
+   <addaction name="menuTransform"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="windowTitle">
@@ -103,6 +209,47 @@
    <addaction name="separator"/>
    <addaction name="actionClearCanvas"/>
    <addaction name="actionDeleteSelected"/>
+  </widget>
+  <widget class="QToolBar" name="transformToolBar">
+   <property name="windowTitle">
+    <string>变换工具</string>
+   </property>
+   <widget class="QSpinBox" name="translateDistanceSpinBox">
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>100</number>
+    </property>
+    <property name="value">
+     <number>10</number>
+    </property>
+    <property name="fixedWidth">
+     <number>60</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="rotateAngleSpinBox">
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>90</number>
+    </property>
+    <property name="value">
+     <number>15</number>
+    </property>
+    <property name="fixedWidth">
+     <number>60</number>
+    </property>
+   </widget>
+   <addaction name="separator"/>
+   <addaction name="actionMoveUp"/>
+   <addaction name="actionMoveDown"/>
+   <addaction name="actionMoveLeft"/>
+   <addaction name="actionMoveRight"/>
+   <addaction name="separator"/>
+   <addaction name="actionRotateCW"/>
+   <addaction name="actionRotateCCW"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -211,6 +358,54 @@
     <string>Delete</string>
    </property>
   </action>
+  <action name="actionMoveUp">
+   <property name="text">
+    <string>向上移动</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Up</string>
+   </property>
+  </action>
+  <action name="actionMoveDown">
+   <property name="text">
+    <string>向下移动</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Down</string>
+   </property>
+  </action>
+  <action name="actionMoveLeft">
+   <property name="text">
+    <string>向左移动</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Left</string>
+   </property>
+  </action>
+  <action name="actionMoveRight">
+   <property name="text">
+    <string>向右移动</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Right</string>
+   </property>
+  </action>
+  <action name="actionRotateCW">
+   <property name="text">
+    <string>顺时针旋转</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionRotateCCW">
+   <property name="text">
+    <string>逆时针旋转</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
@@ -304,6 +499,42 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>on_actionDeleteSelected_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionMoveUp</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionMoveUp_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionMoveDown</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionMoveDown_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionMoveLeft</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionMoveLeft_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionMoveRight</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionMoveRight_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionRotateCW</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionRotateCW_triggered()</slot>
+  </connection>
+  <connection>
+   <sender>actionRotateCCW</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_actionRotateCCW_triggered()</slot>
   </connection>
  </connections>
 </ui>

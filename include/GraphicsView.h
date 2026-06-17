@@ -39,6 +39,9 @@ private:
     void drawGrid(QPainter* painter);
     void drawShapes(QPainter* painter);
     void drawPreview(QPainter* painter);
+    
+    // 检查鼠标是否接近多边形起点
+    bool isNearPolygonStart(const QPoint& pos) const;
 
     GraphicsScene* m_scene;
     ToolType m_currentTool;
@@ -48,9 +51,13 @@ private:
 
     QPoint m_startPoint;
     QPoint m_endPoint;
+    QPoint m_currentMousePos;  // 当前鼠标位置
     QVector<QPoint> m_polygonPoints;
     bool m_isDrawing;
     bool m_isDragging;
+    
+    // 多边形起点接近阈值
+    static const int POLYGON_CLOSE_THRESHOLD = 15;
 };
 
 #endif

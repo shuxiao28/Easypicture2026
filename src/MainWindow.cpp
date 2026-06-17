@@ -15,7 +15,9 @@ MainWindow::MainWindow(QWidget* parent)
       m_fillColor(Qt::white),
       m_penWidth(2),
       m_translateDistance(10),
-      m_rotateAngle(15)
+      m_rotateAngle(15),
+      m_hasUnsavedChanges(false),
+      m_currentFilePath("")
 {
     ui->setupUi(this);
     
@@ -55,36 +57,60 @@ void MainWindow::on_actionNew_triggered() {
 }
 
 void MainWindow::on_actionOpen_triggered() {
+    // 先检查是否有未保存的修改
+    if (m_hasUnsavedChanges) {
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "保存提示",
+            "当前有未保存的修改，是否先保存？",
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        
+        if (reply == QMessageBox::Save) {
+            on_actionSave_triggered();
+            if (m_hasUnsavedChanges) return; // 保存失败或取消
+        } else if (reply == QMessageBox::Cancel) {
+            return;
+        }
+    }
+    
     QString filePath = QFileDialog::getOpenFileName(this, "打开文件", "", 
-        "矢量图形文件 (*.svg);;所有文件 (*.*)");
+        "文本图形文件 (*.txt);;SVG文件 (*.svg);;所有文件 (*.*)");
     
     if (!filePath.isEmpty()) {
         FileManager manager;
-        manager.loadScene(m_scene, filePath);
-        statusBar()->showMessage("打开文件: " + filePath);
+        if (manager.loadScene(m_scene, filePath)) {
+            m_currentFilePath = filePath;
+            m_hasUnsavedChanges = false;
+            setWindowTitle("EasyPicture 2026 - " + filePath);
+            setWindowModified(false);
+            statusBar()->showMessage("打开文件: " + filePath);
+        } else {
+            QMessageBox::warning(this, "错误", "无法打开文件: " + filePath);
+        }
     }
 }
 
 void MainWindow::on_actionSave_triggered() {
-    QString filePath = QFileDialog::getSaveFileName(this, "保存文件", "", 
-        "SVG文件 (*.svg);;所有文件 (*.*)");
+    QString filePath = m_currentFilePath;
+    
+    if (filePath.isEmpty()) {
+        filePath = QFileDialog::getSaveFileName(this, "保存文件", "", 
+            "文本图形文件 (*.txt);;SVG文件 (*.svg);;所有文件 (*.*)");
+    }
     
     if (!filePath.isEmpty()) {
         FileManager manager;
-        manager.saveScene(m_scene, filePath);
-        statusBar()->showMessage("保存文件: " + filePath);
+        if (manager.saveScene(m_scene, filePath)) {
+            m_currentFilePath = filePath;
+            m_hasUnsavedChanges = false;
+            setWindowTitle("EasyPicture 2026 - " + filePath);
+            setWindowModified(false);
+            statusBar()->showMessage("保存文件: " + filePath);
+        } else {
+            QMessageBox::warning(this, "错误", "无法保存文件: " + filePath);
+        }
     }
 }
 
 void MainWindow::on_actionExit_triggered() {
-    if (!m_scene->shapes().isEmpty()) {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, "确认退出", 
-            "当前画布有内容，确定要退出吗？",
-            QMessageBox::Yes | QMessageBox::No);
-        if (reply != QMessageBox::Yes) {
-            return;
-        }
-    }
     close();
 }
 
@@ -206,14 +232,14 @@ void MainWindow::contextMenuEvent(QContextMenuEvent* event) {
 }
 
 bool MainWindow::maybeSave() {
-    if (m_scene && !m_scene->shapes().isEmpty()) {
+    if (m_hasUnsavedChanges || (m_scene && !m_scene->shapes().isEmpty())) {
         QMessageBox::StandardButton reply = QMessageBox::question(this, "保存提示",
-            "当前画布有未保存的内容，是否保存？",
+            "当前有未保存的内容，是否保存？",
             QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         
         if (reply == QMessageBox::Save) {
             on_actionSave_triggered();
-            return true;
+            return !m_hasUnsavedChanges; // 如果保存成功则返回true
         } else if (reply == QMessageBox::Discard) {
             return true;
         } else {
@@ -280,8 +306,23 @@ void MainWindow::onCanvasSwitched(int index) {
     m_scene = m_canvasManager->currentScene();
     if (m_view && m_scene) {
         m_view->setScene(m_scene);
+        // 连接场景变化信号
+        connect(m_scene, &GraphicsScene::shapeAdded, this, &MainWindow::onSceneChanged);
+        connect(m_scene, &GraphicsScene::shapeRemoved, this, &MainWindow::onSceneChanged);
+        connect(m_scene, &GraphicsScene::sceneCleared, this, &MainWindow::onSceneChanged);
     }
     updateStatusBar();
+}
+
+void MainWindow::onSceneChanged() {
+    m_hasUnsavedChanges = true;
+    // 更新窗口标题显示修改状态
+    if (!m_currentFilePath.isEmpty()) {
+        setWindowTitle("EasyPicture 2026 - " + m_currentFilePath + " [*]");
+    } else {
+        setWindowTitle("EasyPicture 2026 - 未保存 [*]");
+    }
+    setWindowModified(true);
 }
 
 void MainWindow::onCanvasListClicked(QListWidgetItem* item) {
