@@ -26,6 +26,9 @@ public:
     virtual void scale(qreal factor, const QPoint& center) = 0;
     virtual QRect boundingRect() const = 0;
     virtual ShapeType type() const = 0;
+    
+    virtual QString getInfo() const = 0;
+    virtual QPointF center() const = 0;
 
     void setPenColor(const QColor& color);
     void setBrushColor(const QColor& color);

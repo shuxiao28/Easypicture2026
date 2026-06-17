@@ -2,22 +2,27 @@
 #include "FileManager.h"
 #include <QColorDialog>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QMessageBox>
+#include <QListWidget>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
       m_penColor(Qt::black),
       m_fillColor(Qt::white),
-      m_penWidth(2)
+      m_penWidth(2),
+      m_translateDistance(10),
+      m_rotateAngle(15)
 {
     ui->setupUi(this);
     
-    m_scene = new GraphicsScene(this);
-    m_view = new GraphicsView(this);
-    m_view->setScene(m_scene);
-    
-    ui->centralLayout->addWidget(m_view);
+    m_canvasManager = new CanvasManager(this);
+    setupCanvasManager();
+    setupTransformActions();
+    setupCanvasList();
     
     m_drawActionGroup = new QActionGroup(this);
     m_drawActionGroup->addAction(ui->actionSelect);
@@ -28,6 +33,8 @@ MainWindow::MainWindow(QWidget* parent)
     m_drawActionGroup->addAction(ui->actionCurve);
     
     ui->penWidthSpinBox->setValue(m_penWidth);
+    
+    m_canvasManager->addCanvas("Canvas 1");
 }
 
 MainWindow::~MainWindow() {
@@ -158,4 +165,177 @@ void MainWindow::on_actionDeleteSelected_triggered() {
     
     m_scene->deleteSelected();
     statusBar()->showMessage("已删除选中图形");
+}
+
+void MainWindow::setupCanvasManager() {
+    connect(m_canvasManager, &CanvasManager::canvasAdded, this, &MainWindow::onCanvasAdded);
+    connect(m_canvasManager, &CanvasManager::canvasSwitched, this, &MainWindow::onCanvasSwitched);
+}
+
+void MainWindow::setupTransformActions() {
+    connect(ui->translateDistanceSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
+            [this](int value) { m_translateDistance = value; });
+    connect(ui->rotateAngleSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
+            [this](int value) { m_rotateAngle = value; });
+}
+
+void MainWindow::setupCanvasList() {
+    m_view = new GraphicsView(this);
+    ui->drawAreaLayout->addWidget(m_view);
+    
+    connect(ui->canvasListWidget, &QListWidget::itemClicked,
+            this, &MainWindow::onCanvasListClicked);
+    connect(ui->addCanvasButton, &QPushButton::clicked,
+            this, &MainWindow::onAddCanvas);
+    connect(ui->removeCanvasButton, &QPushButton::clicked,
+            this, &MainWindow::onRemoveCanvas);
+    connect(ui->renameCanvasButton, &QPushButton::clicked,
+            this, &MainWindow::onRenameCanvas);
+}
+
+void MainWindow::closeEvent(QCloseEvent* event) {
+    if (maybeSave()) {
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void MainWindow::contextMenuEvent(QContextMenuEvent* event) {
+    showShapeContextMenu(event->globalPos());
+}
+
+bool MainWindow::maybeSave() {
+    if (m_scene && !m_scene->shapes().isEmpty()) {
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "保存提示",
+            "当前画布有未保存的内容，是否保存？",
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        
+        if (reply == QMessageBox::Save) {
+            on_actionSave_triggered();
+            return true;
+        } else if (reply == QMessageBox::Discard) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+
+void MainWindow::on_actionMoveUp_triggered() {
+    if (m_scene && m_scene->hasSelection()) {
+        m_scene->translateSelected(QPoint(0, -m_translateDistance));
+        updateStatusBar();
+    }
+}
+
+void MainWindow::on_actionMoveDown_triggered() {
+    if (m_scene && m_scene->hasSelection()) {
+        m_scene->translateSelected(QPoint(0, m_translateDistance));
+        updateStatusBar();
+    }
+}
+
+void MainWindow::on_actionMoveLeft_triggered() {
+    if (m_scene && m_scene->hasSelection()) {
+        m_scene->translateSelected(QPoint(-m_translateDistance, 0));
+        updateStatusBar();
+    }
+}
+
+void MainWindow::on_actionMoveRight_triggered() {
+    if (m_scene && m_scene->hasSelection()) {
+        m_scene->translateSelected(QPoint(m_translateDistance, 0));
+        updateStatusBar();
+    }
+}
+
+void MainWindow::on_actionRotateCW_triggered() {
+    if (m_scene && m_scene->hasSelection()) {
+        QList<Shape*> selected = m_scene->selectedShapes();
+        if (!selected.isEmpty()) {
+            QPoint center = selected.first()->center().toPoint();
+            m_scene->rotateSelected(m_rotateAngle, center);
+            updateStatusBar();
+        }
+    }
+}
+
+void MainWindow::on_actionRotateCCW_triggered() {
+    if (m_scene && m_scene->hasSelection()) {
+        QList<Shape*> selected = m_scene->selectedShapes();
+        if (!selected.isEmpty()) {
+            QPoint center = selected.first()->center().toPoint();
+            m_scene->rotateSelected(-m_rotateAngle, center);
+            updateStatusBar();
+        }
+    }
+}
+
+void MainWindow::onCanvasAdded(const QString& name) {
+}
+
+void MainWindow::onCanvasSwitched(int index) {
+    m_scene = m_canvasManager->currentScene();
+    if (m_view && m_scene) {
+        m_view->setScene(m_scene);
+    }
+    updateStatusBar();
+}
+
+void MainWindow::onCanvasListClicked(QListWidgetItem* item) {
+    int index = ui->canvasListWidget->row(item);
+    m_canvasManager->switchCanvas(index);
+}
+
+void MainWindow::onAddCanvas() {
+    m_canvasManager->addCanvas();
+}
+
+void MainWindow::onRemoveCanvas() {
+    int index = ui->canvasListWidget->currentRow();
+    if (index >= 0) {
+        m_canvasManager->removeCanvas(index);
+    }
+}
+
+void MainWindow::onRenameCanvas() {
+    int index = ui->canvasListWidget->currentRow();
+    if (index >= 0) {
+        QListWidgetItem* item = ui->canvasListWidget->item(index);
+        QString newName = QInputDialog::getText(this, "重命名画布", "输入新名称:",
+            QLineEdit::Normal, item->text());
+        if (!newName.isEmpty()) {
+            m_canvasManager->renameCanvas(index, newName);
+            item->setText(newName);
+        }
+    }
+}
+
+void MainWindow::updateStatusBar() {
+    if (m_scene && m_scene->hasSelection()) {
+        QList<Shape*> selected = m_scene->selectedShapes();
+        if (!selected.isEmpty()) {
+            Shape* shape = selected.first();
+            statusBar()->showMessage(shape->getInfo());
+            return;
+        }
+    }
+    statusBar()->showMessage("就绪");
+}
+
+void MainWindow::showShapeContextMenu(const QPoint& pos) {
+    QMenu menu(this);
+    QAction* editAction = menu.addAction("编辑属性");
+    QAction* deleteAction = menu.addAction("删除");
+    
+    connect(editAction, &QAction::triggered, this, &MainWindow::onEditShapeProperties);
+    connect(deleteAction, &QAction::triggered, this, &MainWindow::on_actionDeleteSelected_triggered);
+    
+    menu.exec(pos);
+}
+
+void MainWindow::onEditShapeProperties() {
+    QMessageBox::information(this, "提示", "图形属性编辑功能");
 }

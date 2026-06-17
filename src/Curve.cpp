@@ -151,6 +151,23 @@ Shape::ShapeType Curve::type() const {
     return Shape::Curve;
 }
 
+QString Curve::getInfo() const {
+    QPointF c = center();
+    QRect rect = boundingRect();
+    return QString("曲线(%1控制点) - 中心: (%2, %3) 尺寸: %4 x %5").arg(m_controlPoints.size()).arg(c.x()).arg(c.y()).arg(rect.width()).arg(rect.height());
+}
+
+QPointF Curve::center() const {
+    if (m_controlPoints.isEmpty()) return QPointF(0, 0);
+    
+    qreal x = 0, y = 0;
+    for (const QPoint& p : m_controlPoints) {
+        x += p.x();
+        y += p.y();
+    }
+    return QPointF(x / m_controlPoints.size(), y / m_controlPoints.size());
+}
+
 void Curve::setControlPoints(const QVector<QPoint>& points) {
     m_controlPoints = points;
 }

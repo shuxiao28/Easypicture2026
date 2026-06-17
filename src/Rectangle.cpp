@@ -103,6 +103,15 @@ Shape::ShapeType Rectangle::type() const {
     return Shape::Rectangle;
 }
 
+QString Rectangle::getInfo() const {
+    QPointF c = center();
+    return QString("矩形 - 中心: (%1, %2) 尺寸: %3 x %4").arg(c.x()).arg(c.y()).arg(m_rect.width()).arg(m_rect.height());
+}
+
+QPointF Rectangle::center() const {
+    return m_rect.center();
+}
+
 void Rectangle::setRect(const QRect& rect) {
     m_rect = rect;
 }

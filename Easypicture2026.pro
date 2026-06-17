@@ -23,7 +23,8 @@ SOURCES += \
     src/GraphicsView.cpp \
     src/MainWindow.cpp \
     src/FileManager.cpp \
-    src/ShapeFactory.cpp
+    src/ShapeFactory.cpp \
+    src/CanvasManager.cpp
 
 HEADERS += \
     include/Shape.h \
@@ -37,6 +38,7 @@ HEADERS += \
     include/MainWindow.h \
     include/FileManager.h \
     include/ShapeFactory.h \
+    include/CanvasManager.h \
     ui_mainwindow.h
 
 INCLUDEPATH += $$PWD/include

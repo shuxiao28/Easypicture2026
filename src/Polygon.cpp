@@ -94,6 +94,23 @@ Shape::ShapeType Polygon::type() const {
     return Shape::Polygon;
 }
 
+QString Polygon::getInfo() const {
+    QPointF c = center();
+    QRect rect = boundingRect();
+    return QString("多边形(%1边) - 中心: (%2, %3) 尺寸: %4 x %5").arg(m_points.size()).arg(c.x()).arg(c.y()).arg(rect.width()).arg(rect.height());
+}
+
+QPointF Polygon::center() const {
+    if (m_points.isEmpty()) return QPointF(0, 0);
+    
+    qreal x = 0, y = 0;
+    for (const QPoint& p : m_points) {
+        x += p.x();
+        y += p.y();
+    }
+    return QPointF(x / m_points.size(), y / m_points.size());
+}
+
 void Polygon::setPoints(const QVector<QPoint>& points) {
     m_points = points;
 }

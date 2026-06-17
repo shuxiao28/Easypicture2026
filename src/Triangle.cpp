@@ -88,6 +88,18 @@ Shape::ShapeType Triangle::type() const {
     return Shape::Triangle;
 }
 
+QString Triangle::getInfo() const {
+    QPointF c = center();
+    QRect rect = boundingRect();
+    return QString("三角形 - 中心: (%1, %2) 尺寸: %3 x %4").arg(c.x()).arg(c.y()).arg(rect.width()).arg(rect.height());
+}
+
+QPointF Triangle::center() const {
+    qreal x = (m_p1.x() + m_p2.x() + m_p3.x()) / 3.0;
+    qreal y = (m_p1.y() + m_p2.y() + m_p3.y()) / 3.0;
+    return QPointF(x, y);
+}
+
 void Triangle::setPoints(const QPoint& p1, const QPoint& p2, const QPoint& p3) {
     m_p1 = p1;
     m_p2 = p2;
