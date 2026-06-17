@@ -10,8 +10,10 @@ debug/GraphicsView.o
 debug/MainWindow.o
 debug/FileManager.o
 debug/ShapeFactory.o
+debug/CanvasManager.o
 debug/qrc_resources.o
 debug/moc_GraphicsScene.o
 debug/moc_GraphicsView.o
 debug/moc_MainWindow.o
 debug/moc_FileManager.o
+debug/moc_CanvasManager.o

@@ -60,6 +60,7 @@ private:
     void setupCanvasManager();
     void setupTransformActions();
     void setupCanvasList();
+    void setupIcons();
     bool maybeSave();
     
     Ui::MainWindow* ui;

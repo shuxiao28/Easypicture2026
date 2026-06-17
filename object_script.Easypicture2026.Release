@@ -10,8 +10,10 @@ release/GraphicsView.o
 release/MainWindow.o
 release/FileManager.o
 release/ShapeFactory.o
+release/CanvasManager.o
 release/qrc_resources.o
 release/moc_GraphicsScene.o
 release/moc_GraphicsView.o
 release/moc_MainWindow.o
 release/moc_FileManager.o
+release/moc_CanvasManager.o

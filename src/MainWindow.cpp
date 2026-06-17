@@ -7,6 +7,7 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QIcon>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
@@ -19,10 +20,11 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui->setupUi(this);
     
-    m_canvasManager = new CanvasManager(this);
+    m_canvasManager = new CanvasManager();
     setupCanvasManager();
     setupTransformActions();
     setupCanvasList();
+    setupIcons();
     
     m_drawActionGroup = new QActionGroup(this);
     m_drawActionGroup->addAction(ui->actionSelect);
@@ -168,8 +170,6 @@ void MainWindow::on_actionDeleteSelected_triggered() {
 }
 
 void MainWindow::setupCanvasManager() {
-    connect(m_canvasManager, &CanvasManager::canvasAdded, this, &MainWindow::onCanvasAdded);
-    connect(m_canvasManager, &CanvasManager::canvasSwitched, this, &MainWindow::onCanvasSwitched);
 }
 
 void MainWindow::setupTransformActions() {
@@ -191,6 +191,28 @@ void MainWindow::setupCanvasList() {
             this, &MainWindow::onRemoveCanvas);
     connect(ui->renameCanvasButton, &QPushButton::clicked,
             this, &MainWindow::onRenameCanvas);
+}
+
+void MainWindow::setupIcons() {
+    ui->actionSelect->setIcon(QIcon::fromTheme("cursor"));
+    ui->actionTriangle->setIcon(QIcon::fromTheme("shape-triangle"));
+    ui->actionRectangle->setIcon(QIcon::fromTheme("shape-square"));
+    ui->actionEllipse->setIcon(QIcon::fromTheme("shape-circle"));
+    ui->actionPolygon->setIcon(QIcon::fromTheme("shape-polygon"));
+    ui->actionCurve->setIcon(QIcon::fromTheme("curve"));
+    ui->actionDeleteSelected->setIcon(QIcon::fromTheme("edit-delete"));
+    ui->actionNew->setIcon(QIcon::fromTheme("document-new"));
+    ui->actionSave->setIcon(QIcon::fromTheme("document-save"));
+    ui->actionOpen->setIcon(QIcon::fromTheme("document-open"));
+    ui->actionMoveUp->setIcon(QIcon::fromTheme("arrow-up"));
+    ui->actionMoveDown->setIcon(QIcon::fromTheme("arrow-down"));
+    ui->actionMoveLeft->setIcon(QIcon::fromTheme("arrow-left"));
+    ui->actionMoveRight->setIcon(QIcon::fromTheme("arrow-right"));
+    ui->actionRotateCW->setIcon(QIcon::fromTheme("rotate-cw"));
+    ui->actionRotateCCW->setIcon(QIcon::fromTheme("rotate-ccw"));
+    ui->actionPenColor->setIcon(QIcon::fromTheme("color-picker"));
+    ui->actionFillColor->setIcon(QIcon::fromTheme("fill-color"));
+    ui->actionClearCanvas->setIcon(QIcon::fromTheme("edit-clear"));
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
@@ -274,6 +296,10 @@ void MainWindow::on_actionRotateCCW_triggered() {
 }
 
 void MainWindow::onCanvasAdded(const QString& name) {
+    QListWidgetItem* item = new QListWidgetItem(name);
+    item->setFlags(item->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    ui->canvasListWidget->addItem(item);
+    ui->canvasListWidget->setCurrentItem(item);
 }
 
 void MainWindow::onCanvasSwitched(int index) {
@@ -287,15 +313,33 @@ void MainWindow::onCanvasSwitched(int index) {
 void MainWindow::onCanvasListClicked(QListWidgetItem* item) {
     int index = ui->canvasListWidget->row(item);
     m_canvasManager->switchCanvas(index);
+    
+    m_scene = m_canvasManager->currentScene();
+    if (m_view && m_scene) {
+        m_view->setScene(m_scene);
+    }
+    updateStatusBar();
 }
 
 void MainWindow::onAddCanvas() {
-    m_canvasManager->addCanvas();
+    QString name = QString("Canvas %1").arg(ui->canvasListWidget->count() + 1);
+    m_canvasManager->addCanvas(name);
+    
+    QListWidgetItem* item = new QListWidgetItem(name);
+    item->setFlags(item->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    ui->canvasListWidget->addItem(item);
+    ui->canvasListWidget->setCurrentItem(item);
+    
+    m_scene = m_canvasManager->currentScene();
+    if (m_view && m_scene) {
+        m_view->setScene(m_scene);
+    }
 }
 
 void MainWindow::onRemoveCanvas() {
     int index = ui->canvasListWidget->currentRow();
-    if (index >= 0) {
+    if (index >= 0 && ui->canvasListWidget->count() > 1) {
+        delete ui->canvasListWidget->takeItem(index);
         m_canvasManager->removeCanvas(index);
     }
 }

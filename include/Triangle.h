@@ -15,6 +15,8 @@ public:
     void scale(qreal factor, const QPoint& center) override;
     QRect boundingRect() const override;
     ShapeType type() const override;
+    QString getInfo() const override;
+    QPointF center() const override;
 
     void setPoints(const QPoint& p1, const QPoint& p2, const QPoint& p3);
     QPoint p1() const;
