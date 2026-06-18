@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PropertiesDialog</class>
+ <widget class="QDialog" name="PropertiesDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>420</width>
+    <height>380</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>图形属性</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+    background-color: #f8f8f8;
+}
+QLabel {
+    color: #333;
+    font-weight: 500;
+}
+QSpinBox {
+    background-color: white;
+    border: 1px solid #c0c0c0;
+    border-radius: 3px;
+    padding: 4px;
+    min-width: 80px;
+}
+QSpinBox:focus {
+    border: 1px solid #3498db;
+}
+QPushButton {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    min-width: 80px;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}
+QGroupBox {
+    background-color: white;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    margin-top: 10px;
+    padding: 10px;
+    font-weight: bold;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 5px;
+    color: #2c3e50;
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="shapeTypeLabel">
+     <property name="text">
+      <string>图形类型：</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-size: 14px; font-weight: bold; color: #2c3e50; padding: 6px;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="shapeTypeCombo">
+     <property name="visible">
+      <bool>false</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>矩形</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>椭圆</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>三角形</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>多边形</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>曲线</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="positionGroup">
+     <property name="title">
+      <string>位置与尺寸</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>中心 X：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="centerXSpin">
+        <property name="minimum">
+         <number>-99999</number>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>中心 Y：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QSpinBox" name="centerYSpin">
+        <property name="minimum">
+         <number>-99999</number>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>宽：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="widthSpin">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>高：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QSpinBox" name="heightSpin">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="styleGroup">
+     <property name="title">
+      <string>外观样式</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>线条颜色：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="penColorBtn">
+        <property name="text">
+         <string>#000000</string>
+        </property>
+        <property name="autoDefault">
+         <bool>false</bool>
+        </property>
+        <property name="default">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>线宽：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QSpinBox" name="penWidthSpin">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>50</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>填充颜色：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="brushColorBtn">
+        <property name="text">
+         <string>#FFFFFF</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>宽度/高度将自动同步</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+    <sender>buttonBox</sender>
+    <signal>rejected()</signal>
+    <receiver>PropertiesDialog</receiver>
+    <slot>on_buttonBox_rejected()</slot>
+   </connection>
+  <connection>
+   <sender>penColorBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>PropertiesDialog</receiver>
+   <slot>on_penColorBtn_clicked()</slot>
+  </connection>
+  <connection>
+   <sender>brushColorBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>PropertiesDialog</receiver>
+   <slot>on_brushColorBtn_clicked()</slot>
+  </connection>
+  <connection>
+   <sender>shapeTypeCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>PropertiesDialog</receiver>
+   <slot>on_shapeTypeCombo_currentIndexChanged(int)</slot>
+  </connection>
+ </connections>
+</ui>

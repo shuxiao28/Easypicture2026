@@ -131,28 +131,63 @@ void MainWindow::on_actionSelect_triggered() {
 }
 
 void MainWindow::on_actionTriangle_triggered() {
-    m_view->setCurrentTool(GraphicsView::DrawTriangle);
-    statusBar()->showMessage("绘制三角形 - 拖拽鼠标绘制");
+    PropertiesDialog dlg(Shape::Triangle, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        Shape* shape = dlg.takeCreatedShape();
+        if (shape && m_scene) {
+            m_scene->addShape(shape);
+            m_hasUnsavedChanges = true;
+            statusBar()->showMessage("已创建三角形");
+        }
+    }
 }
 
 void MainWindow::on_actionRectangle_triggered() {
-    m_view->setCurrentTool(GraphicsView::DrawRectangle);
-    statusBar()->showMessage("绘制矩形 - 拖拽鼠标绘制");
+    PropertiesDialog dlg(Shape::Rectangle, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        Shape* shape = dlg.takeCreatedShape();
+        if (shape && m_scene) {
+            m_scene->addShape(shape);
+            m_hasUnsavedChanges = true;
+            statusBar()->showMessage("已创建矩形");
+        }
+    }
 }
 
 void MainWindow::on_actionEllipse_triggered() {
-    m_view->setCurrentTool(GraphicsView::DrawEllipse);
-    statusBar()->showMessage("绘制椭圆 - 拖拽鼠标绘制");
+    PropertiesDialog dlg(Shape::Ellipse, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        Shape* shape = dlg.takeCreatedShape();
+        if (shape && m_scene) {
+            m_scene->addShape(shape);
+            m_hasUnsavedChanges = true;
+            statusBar()->showMessage("已创建椭圆");
+        }
+    }
 }
 
 void MainWindow::on_actionPolygon_triggered() {
-    m_view->setCurrentTool(GraphicsView::DrawPolygon);
-    statusBar()->showMessage("绘制多边形 - 点击添加顶点，右键完成");
+    PropertiesDialog dlg(Shape::Polygon, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        Shape* shape = dlg.takeCreatedShape();
+        if (shape && m_scene) {
+            m_scene->addShape(shape);
+            m_hasUnsavedChanges = true;
+            statusBar()->showMessage("已创建多边形");
+        }
+    }
 }
 
 void MainWindow::on_actionCurve_triggered() {
-    m_view->setCurrentTool(GraphicsView::DrawCurve);
-    statusBar()->showMessage("绘制曲线 - 点击添加控制点，右键完成");
+    PropertiesDialog dlg(Shape::Curve, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        Shape* shape = dlg.takeCreatedShape();
+        if (shape && m_scene) {
+            m_scene->addShape(shape);
+            m_hasUnsavedChanges = true;
+            statusBar()->showMessage("已创建曲线");
+        }
+    }
 }
 
 void MainWindow::on_actionPenColor_triggered() {
@@ -569,5 +604,17 @@ void MainWindow::showShapeContextMenu(const QPoint& pos) {
 }
 
 void MainWindow::onEditShapeProperties() {
-    QMessageBox::information(this, "提示", "图形属性编辑功能");
+    if (!m_scene) return;
+    QList<Shape*> selected = m_scene->selectedShapes();
+    if (selected.isEmpty()) {
+        QMessageBox::information(this, "提示", "请先选择一个图形");
+        return;
+    }
+    Shape* shape = selected.first();
+    PropertiesDialog dlg(shape, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        dlg.applyTo(shape);
+        m_hasUnsavedChanges = true;
+        statusBar()->showMessage("图形属性已更新");
+    }
 }

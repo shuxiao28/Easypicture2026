@@ -10,6 +10,7 @@
 #include "GraphicsScene.h"
 #include "GraphicsView.h"
 #include "CanvasManager.h"
+#include "PropertiesDialog.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT

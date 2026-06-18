@@ -24,7 +24,8 @@ SOURCES += \
     src/MainWindow.cpp \
     src/FileManager.cpp \
     src/ShapeFactory.cpp \
-    src/CanvasManager.cpp
+    src/CanvasManager.cpp \
+    src/PropertiesDialog.cpp
 
 HEADERS += \
     include/Shape.h \
@@ -39,6 +40,7 @@ HEADERS += \
     include/FileManager.h \
     include/ShapeFactory.h \
     include/CanvasManager.h \
+    include/PropertiesDialog.h \
     ui_mainwindow.h
 
 INCLUDEPATH += $$PWD/include
@@ -47,7 +49,8 @@ RESOURCES += \
     resources/resources.qrc
 
 FORMS += \
-    ui/mainwindow.ui
+    ui/mainwindow.ui \
+    ui/PropertiesDialog.ui
 
 CONFIG += c++11
 
